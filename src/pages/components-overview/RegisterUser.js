@@ -14,7 +14,7 @@ const RegisterUser = () => {
     if (itemId) {
       const fetchData = async () => {
         try {
-          const response = await fetch(`http://orion.vps-kinghost.net:3001/api/usuario/${itemId}`);
+          const response = await fetch(`http://191.252.212.69:3001/api/usuario/${itemId}`);
           const data = await response.json();
           setId(data.id);
           setNome(data.nome);
@@ -31,7 +31,7 @@ const RegisterUser = () => {
 
   const handleSave = async () => {
     const method = itemId ? 'PUT' : 'POST';
-    const url = itemId ? `http://orion.vps-kinghost.net:3001/api/usuario/${itemId}` : 'http://orion.vps-kinghost.net:3001/api/usuario';
+    const url = itemId ? `http://191.252.212.69:3001/api/usuario/${itemId}` : 'http://191.252.212.69:3001/api/usuario';
 
     const response = await fetch(url, {
       method,

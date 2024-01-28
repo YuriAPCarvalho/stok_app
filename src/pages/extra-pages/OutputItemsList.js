@@ -14,7 +14,7 @@ const OutputItemsList = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch('http://orion.vps-kinghost.net:3001/api/saida-item');
+        const response = await fetch('http://191.252.212.69:3001/api/saida-item');
         const data = await response.json();
         setOutputItems(data);
       } catch (error) {
@@ -24,7 +24,7 @@ const OutputItemsList = () => {
 
     const fetchEstoques = async () => {
       try {
-        const responseEstoque = await fetch('http://orion.vps-kinghost.net:3001/api/estoque');
+        const responseEstoque = await fetch('http://191.252.212.69:3001/api/estoque');
         const dataEstoque = await responseEstoque.json();
         setEstoques(dataEstoque);
       } catch (error) {
@@ -34,7 +34,7 @@ const OutputItemsList = () => {
 
     const fetchUsuarios = async () => {
       try {
-        const responseUsuarios = await fetch('http://orion.vps-kinghost.net:3001/api/usuario');
+        const responseUsuarios = await fetch('http://191.252.212.69:3001/api/usuario');
         const dataUsuarios = await responseUsuarios.json();
         setUsuarios(dataUsuarios);
       } catch (error) {
@@ -44,7 +44,7 @@ const OutputItemsList = () => {
 
     const fetchSolicitantes = async () => {
       try {
-        const responseSolicitantes = await fetch('http://orion.vps-kinghost.net:3001/api/solicitante');
+        const responseSolicitantes = await fetch('http://191.252.212.69:3001/api/solicitante');
         const dataSolicitantes = await responseSolicitantes.json();
         setSolicitantes(dataSolicitantes);
       } catch (error) {
@@ -60,8 +60,8 @@ const OutputItemsList = () => {
 
   const deleteItem = async (id) => {
     try {
-      await fetch(`http://orion.vps-kinghost.net:3001/api/saida-item/${id}`, { method: 'DELETE' });
-      const response = await fetch('http://orion.vps-kinghost.net:3001/api/saida-item');
+      await fetch(`http://191.252.212.69:3001/api/saida-item/${id}`, { method: 'DELETE' });
+      const response = await fetch('http://191.252.212.69:3001/api/saida-item');
       const data = await response.json();
       setOutputItems(data);
     } catch (error) {

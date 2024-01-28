@@ -12,7 +12,7 @@ const RegisterRequester = () => {
     if (itemId) {
       const fetchData = async () => {
         try {
-          const response = await fetch(`http://orion.vps-kinghost.net:3001/api/solicitante/${itemId}`);
+          const response = await fetch(`http://191.252.212.69:3001/api/solicitante/${itemId}`);
           const data = await response.json();
           setId(data.id);
           setNome(data.nome);
@@ -27,9 +27,7 @@ const RegisterRequester = () => {
 
   const handleSave = async () => {
     const method = itemId ? 'PUT' : 'POST';
-    const url = itemId
-      ? `http://orion.vps-kinghost.net:3001/api/solicitante/${itemId}`
-      : 'http://orion.vps-kinghost.net:3001/api/solicitante';
+    const url = itemId ? `http://191.252.212.69:3001/api/solicitante/${itemId}` : 'http://191.252.212.69:3001/api/solicitante';
 
     const response = await fetch(url, {
       method,

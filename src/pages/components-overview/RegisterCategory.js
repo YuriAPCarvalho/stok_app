@@ -12,7 +12,7 @@ const RegisterCategory = () => {
     if (itemId) {
       const fetchData = async () => {
         try {
-          const response = await fetch(`http://orion.vps-kinghost.net:3001/api/categoria/${itemId}`);
+          const response = await fetch(`http://191.252.212.69:3001/api/categoria/${itemId}`);
           const data = await response.json();
           setId(data.id);
           setDescricao(data.descricao);
@@ -27,7 +27,7 @@ const RegisterCategory = () => {
 
   const handleSave = async () => {
     const method = itemId ? 'PUT' : 'POST';
-    const url = itemId ? `http://orion.vps-kinghost.net:3001/api/categoria/${itemId}` : 'http://orion.vps-kinghost.net:3001/api/categoria';
+    const url = itemId ? `http://191.252.212.69:3001/api/categoria/${itemId}` : 'http://191.252.212.69:3001/api/categoria';
 
     const response = await fetch(url, {
       method,

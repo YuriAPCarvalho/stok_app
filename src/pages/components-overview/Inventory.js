@@ -40,7 +40,7 @@ const Inventory = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const responseEstoque = await fetch('http://orion.vps-kinghost.net:3001/api/estoque');
+        const responseEstoque = await fetch('http://191.252.212.69:3001/api/estoque');
         const dataEstoque = await responseEstoque.json();
         setEstoques(dataEstoque);
       } catch (error) {
@@ -53,16 +53,16 @@ const Inventory = () => {
 
   const fetchProducts = async () => {
     try {
-      const responseSaldo = await fetch(`http://orion.vps-kinghost.net:3001/api/saldo/inventario?estoqueId=${estoqueId}`);
+      const responseSaldo = await fetch(`http://191.252.212.69:3001/api/saldo/inventario?estoqueId=${estoqueId}`);
       const dataSaldo = await responseSaldo.json();
 
       const productRequests = dataSaldo.map(async (saldoItem) => {
         const { produtoId, saldo } = saldoItem;
 
-        const responseProduto = await fetch(`http://orion.vps-kinghost.net:3001/api/produto/${produtoId}`);
+        const responseProduto = await fetch(`http://191.252.212.69:3001/api/produto/${produtoId}`);
         const dataProduto = await responseProduto.json();
 
-        const responseEstoque = await fetch(`http://orion.vps-kinghost.net:3001/api/estoque/${saldoItem.estoqueId}`);
+        const responseEstoque = await fetch(`http://191.252.212.69:3001/api/estoque/${saldoItem.estoqueId}`);
         const dataEstoque = await responseEstoque.json();
 
         return {
@@ -99,7 +99,7 @@ const Inventory = () => {
         console.log('Produto ID:', productId, 'Novo Saldo:', newSaldo);
 
         if (!isNaN(newSaldo) || newSaldo === '') {
-          const response = await fetch('http://orion.vps-kinghost.net:3001/api/saldo', {
+          const response = await fetch('http://191.252.212.69:3001/api/saldo', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json'
