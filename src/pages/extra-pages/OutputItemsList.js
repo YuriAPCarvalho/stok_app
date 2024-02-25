@@ -81,10 +81,10 @@ const OutputItemsList = () => {
             <TableCell align="left">Descrição de Produto</TableCell>
             <TableCell align="left">Quantidade</TableCell>
             <TableCell align="left">Data</TableCell>
-            <TableCell align="left">Descrição da Fazenda</TableCell>
+            <TableCell align="left">Fazenda</TableCell>
             <TableCell align="left">Nome do Usuário</TableCell>
             <TableCell align="left">Nome do Solicitante</TableCell>
-            <TableCell align="left">Gerar Recibo</TableCell>
+            <TableCell align="left">Recibo</TableCell>
             <TableCell align="left">Tipo de Saída</TableCell>
             <TableCell align="center">Ações</TableCell>
           </TableRow>
@@ -104,10 +104,10 @@ const OutputItemsList = () => {
               <TableCell align="left">{item.gerarRecibo ? 'Sim' : 'Não'}</TableCell>
               <TableCell align="left">{item.tipoSaida}</TableCell>
               <TableCell align="center">
-                <Button color="primary" onClick={() => navigate(`/saida-itens/${item.id}`)}>
+                <Button disabled color="primary" onClick={() => navigate(`/saida-itens/${item.id}`)}>
                   <EditIcon />
                 </Button>
-                <Button color="secondary" onClick={() => deleteItem(item.id)}>
+                <Button disabled color="secondary" onClick={() => deleteItem(item.id)}>
                   <DeleteIcon />
                 </Button>
               </TableCell>

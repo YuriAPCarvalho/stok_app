@@ -1,12 +1,13 @@
 // assets
-import { EditOutlined, RedoOutlined, AlignCenterOutlined, FormOutlined } from '@ant-design/icons';
+import { EditOutlined, RedoOutlined, AlignCenterOutlined, FormOutlined, FileJpgOutlined } from '@ant-design/icons';
 
 // icons
 const icons = {
   EditOutlined,
   RedoOutlined,
   AlignCenterOutlined,
-  FormOutlined
+  FormOutlined,
+  FileJpgOutlined
 };
 
 // ==============================|| MENU ITEMS - SAMPLE PAGE & DOCUMENTATION ||============================== //
@@ -36,6 +37,13 @@ const support = {
       type: 'item',
       url: '/inventario',
       icon: icons.FormOutlined
+    },
+    {
+      id: 'relatorio',
+      title: 'Relatório',
+      type: 'item',
+      url: '/relatorio',
+      icon: icons.FileJpgOutlined
     }
   ]
 };

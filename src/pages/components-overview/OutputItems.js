@@ -11,7 +11,9 @@ const OutputItems = () => {
   const [quantidade, setQuantidade] = useState('');
   const [data, setData] = useState();
   const [estoqueId, setEstoqueId] = useState([]);
+  const [subestoqueId, setsubEstoqueId] = useState([]);
   const [estoques, setEstoques] = useState([]);
+  const [subestoques, setsubEstoques] = useState([]);
   const [usuarioId, setUsuarioId] = useState([]);
   const [usuarios, setUsuarios] = useState([]);
   const [solicitanteId, setSolicitanteId] = useState([]);
@@ -29,7 +31,7 @@ const OutputItems = () => {
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({ produtoId, quantidade, data, estoqueId, usuarioId, solicitanteId, gerarRecibo, tipoSaida })
+      body: JSON.stringify({ produtoId, quantidade, data, estoqueId, subestoqueId, usuarioId, solicitanteId, gerarRecibo, tipoSaida })
     });
 
     if (response.ok) {
@@ -68,6 +70,9 @@ const OutputItems = () => {
   const handleEstoqueChange = (event) => {
     setEstoqueId(event.target.value);
   };
+  const handlesubEstoqueChange = (event) => {
+    setsubEstoqueId(event.target.value);
+  };
 
   const handleGerarReciboChange = (e) => {
     setGerarRecibo(e.target.value);
@@ -84,6 +89,7 @@ const OutputItems = () => {
           setQuantidade(data.quantidade);
           setData(data.dataEntrada);
           setEstoqueId(data.estoqueId);
+          setsubEstoqueId(data.subestoqueId);
           setUsuarioId(data.usuarioId);
           setSolicitanteId(data.solicitanteId);
           setGerarRecibo(data.gerarRecibo);
@@ -116,6 +122,17 @@ const OutputItems = () => {
 
     fetchEstoque();
   }, []);
+
+  useEffect(() => {
+    const fetchsubEstoque = async () => {
+      const response = await fetch('http://localhost:3001/api/sub-estoque');
+      const data = await response.json();
+      setsubEstoques(data);
+    };
+
+    fetchsubEstoque();
+  }, []);
+
 
   useEffect(() => {
     const fetchSolicitante = async () => {
@@ -177,6 +194,18 @@ const OutputItems = () => {
               {estoques.map((estoque) => (
                 <MenuItem key={estoque.id} value={estoque.id}>
                   {estoque.descricao}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+        </Grid>
+        <Grid item xs={3}>
+          <FormControl sx={{ width: '100%' }}>
+            <InputLabel id="origin-stock-label">Estoque/Local</InputLabel>
+            <Select labelId="origin-stock-label" value={subestoqueId} onChange={handlesubEstoqueChange}>
+              {subestoques.map((subestoque) => (
+                <MenuItem key={subestoque.id} value={subestoque.id}>
+                  {subestoque.descricao}
                 </MenuItem>
               ))}
             </Select>

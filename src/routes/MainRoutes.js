@@ -32,6 +32,7 @@ const RegisterProduct = Loadable(lazy(() => import('pages/components-overview/Re
 const RegisterUser = Loadable(lazy(() => import('pages/components-overview/RegisterUser')));
 const ReturnItens = Loadable(lazy(() => import('pages/components-overview/ReturnItens')));
 const Inventory = Loadable(lazy(() => import('pages/components-overview/Inventory')));
+const Relatorio = Loadable(lazy(() => import('pages/components-overview/Relatorio')));
 const OutputItems = Loadable(lazy(() => import('pages/components-overview/OutputItems')));
 const AntIcons = Loadable(lazy(() => import('pages/components-overview/AntIcons')));
 
@@ -270,6 +271,14 @@ const MainRoutes = {
       element: (
         <PrivateRoutes>
           <Inventory />
+        </PrivateRoutes>
+      )
+    },
+    {
+      path: 'relatorio',
+      element: (
+        <PrivateRoutes>
+          <Relatorio />
         </PrivateRoutes>
       )
     }
