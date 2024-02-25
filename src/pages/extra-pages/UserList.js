@@ -11,7 +11,7 @@ const UserList = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch('http://191.252.212.69:3001/api/usuario');
+        const response = await fetch('http://localhost:3001/api/usuario');
         const data = await response.json();
         setUsuario(data);
       } catch (error) {
@@ -24,8 +24,8 @@ const UserList = () => {
 
   const deleteItem = async (id) => {
     try {
-      await fetch(`http://191.252.212.69:3001/api/usuario/${id}`, { method: 'DELETE' });
-      const response = await fetch('http://191.252.212.69:3001/api/usuario');
+      await fetch(`http://localhost:3001/api/usuario/${id}`, { method: 'DELETE' });
+      const response = await fetch('http://localhost:3001/api/usuario');
       const data = await response.json();
       setUsuario(data);
     } catch (error) {

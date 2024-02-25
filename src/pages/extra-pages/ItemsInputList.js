@@ -12,7 +12,7 @@ const ItemsInputList = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch('http://191.252.212.69:3001/api/entrada-item');
+        const response = await fetch('http://localhost:3001/api/entrada-item');
         const data = await response.json();
         setItemsInput(data);
       } catch (error) {
@@ -22,7 +22,7 @@ const ItemsInputList = () => {
 
     const fetchEstoques = async () => {
       try {
-        const responseEstoque = await fetch('http://191.252.212.69:3001/api/estoque');
+        const responseEstoque = await fetch('http://localhost:3001/api/estoque');
         const dataEstoque = await responseEstoque.json();
         setEstoques(dataEstoque);
       } catch (error) {
@@ -36,8 +36,8 @@ const ItemsInputList = () => {
 
   const deleteItem = async (id) => {
     try {
-      await fetch(`http://191.252.212.69:3001/api/entrada-item/${id}`, { method: 'DELETE' });
-      const response = await fetch('http://191.252.212.69:3001/api/entrada-item');
+      await fetch(`http://localhost:3001/api/entrada-item/${id}`, { method: 'DELETE' });
+      const response = await fetch('http://localhost:3001/api/entrada-item');
       const data = await response.json();
       setItemsInput(data);
     } catch (error) {

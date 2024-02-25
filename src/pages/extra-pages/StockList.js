@@ -12,7 +12,7 @@ const StockList = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch('http://191.252.212.69:3001/api/estoque');
+        const response = await fetch('http://localhost:3001/api/estoque');
         const data = await response.json();
         setEstoques(data);
       } catch (error) {
@@ -25,8 +25,8 @@ const StockList = () => {
 
   const deleteItem = async (id) => {
     try {
-      await fetch(`http://191.252.212.69:3001/api/estoque/${id}`, { method: 'DELETE' });
-      const response = await fetch('http://191.252.212.69:3001/api/estoque');
+      await fetch(`http://localhost:3001/api/estoque/${id}`, { method: 'DELETE' });
+      const response = await fetch('http://localhost:3001/api/estoque');
       const data = await response.json();
       setEstoques(data);
     } catch (error) {

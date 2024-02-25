@@ -1,4 +1,4 @@
-// assets
+
 import {
   AppstoreAddOutlined,
   AntDesignOutlined,
@@ -40,21 +40,21 @@ const utilities = {
     },
     {
       id: 'util-sub-stock',
-      title: 'Estoque',
+      title: 'Estoque / Local',
       type: 'item',
       url: '/lista-sub-estoque',
       icon: icons.PicRightOutlined
     },
     {
       id: 'util-category',
-      title: 'Categoria',
+      title: 'Grupo',
       type: 'item',
       url: '/lista-categoria',
       icon: icons.ApartmentOutlined
     },
     {
       id: 'util-produto',
-      title: 'Produto',
+      title: 'Materiais',
       type: 'item',
       url: '/lista-produto',
       icon: icons.BarcodeOutlined

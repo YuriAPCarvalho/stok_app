@@ -12,7 +12,7 @@ const RegisterStock = () => {
     if (itemId) {
       const fetchData = async () => {
         try {
-          const response = await fetch(`http://191.252.212.69:3001/api/estoque/${itemId}`);
+          const response = await fetch(`http://localhost:3001/api/estoque/${itemId}`);
           const data = await response.json();
           setId(data.id);
           setDescricao(data.descricao);
@@ -27,7 +27,7 @@ const RegisterStock = () => {
 
   const handleSave = async () => {
     const method = itemId ? 'PUT' : 'POST';
-    const url = itemId ? `http://191.252.212.69:3001/api/estoque/${itemId}` : 'http://191.252.212.69:3001/api/estoque';
+    const url = itemId ? `http://localhost:3001/api/estoque/${itemId}` : 'http://localhost:3001/api/estoque';
 
     const response = await fetch(url, {
       method,

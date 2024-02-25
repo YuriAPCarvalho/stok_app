@@ -12,7 +12,7 @@ const StockList = () => {
 
   const fetchSubEstoques = async () => {
     try {
-      const responseSubEstoque = await fetch('http://191.252.212.69:3001/api/sub-estoque');
+      const responseSubEstoque = await fetch('http://localhost:3001/api/sub-estoque');
       const dataSubEstoque = await responseSubEstoque.json();
       setSubEstoques(dataSubEstoque);
     } catch (error) {
@@ -22,7 +22,7 @@ const StockList = () => {
 
   const fetchEstoques = async () => {
     try {
-      const responseEstoque = await fetch('http://191.252.212.69:3001/api/estoque');
+      const responseEstoque = await fetch('http://localhost:3001/api/estoque');
       const dataEstoque = await responseEstoque.json();
       setEstoques(dataEstoque);
     } catch (error) {
@@ -32,7 +32,7 @@ const StockList = () => {
 
   const deleteItem = async (id) => {
     try {
-      await fetch(`http://191.252.212.69:3001/api/sub-estoque/${id}`, { method: 'DELETE' });
+      await fetch(`http://localhost:3001/api/sub-estoque/${id}`, { method: 'DELETE' });
       fetchSubEstoques();
     } catch (error) {
       console.error('Error deleting item: ', error);

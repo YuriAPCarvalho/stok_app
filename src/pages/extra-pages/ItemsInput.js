@@ -21,7 +21,9 @@ const ItemsInput = () => {
   const [quantidade, setQuantidade] = useState('');
   const [preco, setPreco] = useState('');
   const [estoqueId, setEstoqueId] = useState([]);
+  const [subestoqueId, setSubEstoqueId] = useState([]);
   const [estoques, setEstoques] = useState([]);
+  const [subestoques, setsubEstoques] = useState([]);
   const [dataEntrada, setData] = useState();
 
   const {
@@ -40,16 +42,21 @@ const ItemsInput = () => {
     setEstoqueId(event.target.value);
   };
 
+  const handlesubEstoqueChange = (event) => {
+    console.log('Novo valor de subestoqueId:', event.target.value);
+    setSubEstoqueId(event.target.value);
+  };
+
   const onSubmit = async () => {
     const method = itemId ? 'PUT' : 'POST';
-    const url = itemId ? `http://191.252.212.69:3001/api/entrada-item/${itemId}` : 'http://191.252.212.69:3001/api/entrada-item';
+    const url = itemId ? `http://localhost:3001/api/entrada-item/${itemId}` : 'http://localhost:3001/api/entrada-item';
 
     const response = await fetch(url, {
       method,
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({ produtoId, quantidade, preco: parseFloat(preco.replace(',', '.')), dataEntrada, estoqueId })
+      body: JSON.stringify({ produtoId, quantidade, preco: parseFloat(preco.replace(',', '.')), dataEntrada, estoqueId, subestoqueId })
     });
 
     if (response.ok) {
@@ -63,7 +70,7 @@ const ItemsInput = () => {
     if (itemId) {
       const fetchData = async () => {
         try {
-          const response = await fetch(`http://191.252.212.69:3001/api/entrada-item/${itemId}`);
+          const response = await fetch(`http://localhost:3001/api/entrada-item/${itemId}`);
           const data = await response.json();
           setId(data.id);
           setProdutoId(data.produtoId);
@@ -71,6 +78,7 @@ const ItemsInput = () => {
           setPreco(data.preco);
           setData(data.dataEntrada);
           setEstoqueId(data.estoqueId);
+          setSubEstoqueId(data.subestoqueId);
         } catch (error) {
           console.error('Error fetching data: ', error);
         }
@@ -82,7 +90,7 @@ const ItemsInput = () => {
 
   useEffect(() => {
     const fetchProduto = async () => {
-      const response = await fetch('http://191.252.212.69:3001/api/produto');
+      const response = await fetch('http://localhost:3001/api/produto');
       const data = await response.json();
       setProdutosId(data);
     };
@@ -91,12 +99,22 @@ const ItemsInput = () => {
   }, []);
   useEffect(() => {
     const fetchEstoque = async () => {
-      const response = await fetch('http://191.252.212.69:3001/api/estoque');
+      const response = await fetch('http://localhost:3001/api/estoque');
       const data = await response.json();
       setEstoques(data);
     };
 
     fetchEstoque();
+  }, []);
+
+  useEffect(() => {
+    const fetchsubEstoque = async () => {
+      const response = await fetch('http://localhost:3001/api/sub-estoque');
+      const data = await response.json();
+      setsubEstoques(data);
+    };
+
+    fetchsubEstoque();
   }, []);
 
   return (
@@ -108,7 +126,7 @@ const ItemsInput = () => {
         <Grid item xs={1}>
           <TextField label="ID" type="number" disabled fullWidth value={id} onChange={(e) => setId(e.target.value)} />
         </Grid>
-        <Grid item xs={11}>
+        <Grid item xs={5}>
           <FormControl fullWidth>
             <InputLabel id="produtoId-label">Buscar por Produtos</InputLabel>
             <Select labelId="produtoId-label" value={produtoId} onChange={handleProdutoIdChange}>
@@ -144,7 +162,7 @@ const ItemsInput = () => {
             onChange={(e) => setPreco(e.target.value)}
           />
         </Grid>
-        <Grid item xs={3}>
+        <Grid item xs={2}>
           <TextField
             sx={{ width: '100%' }}
             {...register('dataEntrada')}
@@ -171,6 +189,19 @@ const ItemsInput = () => {
             </Select>
           </FormControl>
         </Grid>
+        <Grid item xs={3}>
+          <FormControl sx={{ width: '100%' }}>
+            <InputLabel id="sub-estoque-label">Estoque/Local</InputLabel>
+            <Select labelId="sub-estoque-label" value={subestoqueId} onChange={handlesubEstoqueChange}>
+              {subestoques.map((estoque) => (
+                <MenuItem key={estoque.id} value={estoque.id}>
+                  {estoque.descricao}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+        </Grid>
+
         <Grid item xs={2}>
           <TextField
             sx={{ width: '100%' }}

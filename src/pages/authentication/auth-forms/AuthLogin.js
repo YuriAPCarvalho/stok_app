@@ -8,7 +8,7 @@ import { EyeOutlined, EyeInvisibleOutlined } from '@ant-design/icons';
 
 const handleLogin = async (values) => {
   try {
-    const response = await fetch('http://191.252.212.69:3001/api/login', {
+    const response = await fetch('http://localhost:3001/api/login', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'

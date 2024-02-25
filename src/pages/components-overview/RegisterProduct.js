@@ -44,7 +44,7 @@ const RegisterProduct = () => {
     if (itemId) {
       const fetchData = async () => {
         try {
-          const response = await fetch(`http://191.252.212.69:3001/api/produto/${itemId}`);
+          const response = await fetch(`http://localhost:3001/api/produto/${itemId}`);
           const data = await response.json();
           setId(data.id);
           setDescricao(data.descricao);
@@ -70,7 +70,7 @@ const RegisterProduct = () => {
 
   useEffect(() => {
     const fetchCategorias = async () => {
-      const response = await fetch('http://191.252.212.69:3001/api/categoria');
+      const response = await fetch('http://localhost:3001/api/categoria');
       const data = await response.json();
       setCategorias(data);
     };
@@ -80,7 +80,7 @@ const RegisterProduct = () => {
 
   const handleSave = async () => {
     const method = itemId ? 'PUT' : 'POST';
-    const url = itemId ? `http://191.252.212.69:3001/api/produto/${itemId}` : 'http://191.252.212.69:3001/api/produto';
+    const url = itemId ? `http://localhost:3001/api/produto/${itemId}` : 'http://localhost:3001/api/produto';
 
     const formData = new FormData();
     formData.append('fotoProduto', fotoProduto);
@@ -118,7 +118,7 @@ const RegisterProduct = () => {
         </Grid>
         <Grid item xs={3}>
           <FormControl fullWidth>
-            <InputLabel>Categoria</InputLabel>
+            <InputLabel>Grupo</InputLabel>
             <Select value={categoriaId} onChange={handleCategoriaChange}>
               {categorias.map((categoria) => (
                 <MenuItem key={categoria.id} value={categoria.id}>

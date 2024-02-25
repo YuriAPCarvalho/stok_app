@@ -14,8 +14,8 @@ import {
   FormControl,
   InputLabel,
   Select,
-  MenuItem,
-  TextField
+  TextField,
+  MenuItem
 } from '@mui/material';
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';
@@ -31,20 +31,34 @@ const bufferToBase64 = (buffer) => {
 
 const Inventory = () => {
   const navigate = useNavigate();
-  const [estoques, setEstoques] = useState([]);
+
   const [estoqueId, setEstoqueId] = useState('');
-  const [products, setProducts] = useState([]);
+  const [selectedLocal, setSelectedLocal] = useState('');
+  const [selectedGrupo, setSelectedGrupo] = useState('');
+  const [searchEnabled, setSearchEnabled] = useState(false);
   const [inventoryStarted, setInventoryStarted] = useState(false);
+  const [products, setProducts] = useState([]);
   const [newSaldos, setNewSaldos] = useState({});
+  const [estoques, setEstoques] = useState([]);
+  const [localData, setLocalData] = useState([]);
+  const [grupoData, setGrupoData] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const responseEstoque = await fetch('http://191.252.212.69:3001/api/estoque');
+        const responseEstoque = await fetch('http://localhost:3001/api/estoque');
         const dataEstoque = await responseEstoque.json();
         setEstoques(dataEstoque);
+
+        const responseLocal = await fetch('http://localhost:3001/api/sub-estoque');
+        const dataLocal = await responseLocal.json();
+        setLocalData(dataLocal);
+
+        const responseGrupo = await fetch('http://localhost:3001/api/categoria');
+        const dataGrupo = await responseGrupo.json();
+        setGrupoData(dataGrupo);
       } catch (error) {
-        console.error('Error fetching data: ', error);
+        console.error('Erro ao buscar dados: ', error);
       }
     };
 
@@ -53,40 +67,40 @@ const Inventory = () => {
 
   const fetchProducts = async () => {
     try {
-      const responseSaldo = await fetch(`http://191.252.212.69:3001/api/saldo/inventario?estoqueId=${estoqueId}`);
-      const dataSaldo = await responseSaldo.json();
+      if (searchEnabled && (estoqueId || selectedLocal || selectedGrupo)) {
+        const queryParams = new URLSearchParams({
+          estoqueId,
+          local: selectedLocal,
+          grupo: selectedGrupo
+        });
 
-      const productRequests = dataSaldo.map(async (saldoItem) => {
-        const { produtoId, saldo } = saldoItem;
+        const responseSaldo = await fetch(`http://localhost:3001/api/saldo/busca?${queryParams}`);
+        const dataSaldo = await responseSaldo.json();
 
-        const responseProduto = await fetch(`http://191.252.212.69:3001/api/produto/${produtoId}`);
-        const dataProduto = await responseProduto.json();
+     
+        const productsData = dataSaldo.map((saldo) => ({
+          produtoId: saldo.id,
+          saldo: saldo.saldo,
+          descricaoProduto: saldo.descricao,
+          descricaoEstoque: saldo.descricaoEstoque,
+          fotoProduto: saldo.fotoProduto, 
+          mimeType: 'image/jpeg' 
+        }));
 
-        const responseEstoque = await fetch(`http://191.252.212.69:3001/api/estoque/${saldoItem.estoqueId}`);
-        const dataEstoque = await responseEstoque.json();
-
-        return {
-          produtoId,
-          saldo,
-          descricaoProduto: dataProduto.descricao,
-          descricaoEstoque: dataEstoque.descricao,
-          fotoProduto: dataProduto.fotoProduto, // Adicione a foto do produto aqui
-          mimeType: dataProduto.mimeType
-        };
-      });
-
-      const productsData = await Promise.all(productRequests);
-      setProducts(productsData);
+        setProducts(productsData);
+      }
     } catch (error) {
-      console.error('Error fetching saldo: ', error);
+      console.error('Erro ao buscar saldo: ', error);
     }
   };
 
   useEffect(() => {
-    if (estoqueId) {
-      fetchProducts();
-    }
-  }, [estoqueId]);
+    fetchProducts();
+  }, [searchEnabled, estoqueId, selectedLocal, selectedGrupo]);
+
+  const handleSearchClick = () => {
+    setSearchEnabled(true);
+  };
 
   const startInventory = () => {
     console.log('Inventário iniciado!');
@@ -97,36 +111,36 @@ const Inventory = () => {
     try {
       const saveRequests = Object.entries(newSaldos).map(async ([productId, newSaldo]) => {
         console.log('Produto ID:', productId, 'Novo Saldo:', newSaldo);
-
+  
         if (!isNaN(newSaldo) || newSaldo === '') {
-          const response = await fetch('http://191.252.212.69:3001/api/saldo', {
-            method: 'POST',
+          const url = `http://localhost:3001/api/saldo/${productId}/${estoqueId}/${selectedLocal}`;
+          console.log('URL:', url);
+          const response = await fetch(url, {
+            method: 'PUT',
             headers: {
               'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-              produtoId: productId,
-              estoqueId: estoqueId,
               saldo: newSaldo
             })
           });
-
+  
           if (!response.ok) {
-            console.error(`Erro ao salvar saldo para o produto ${productId}`);
+            const responseBody = await response.text(); 
+            console.error(`Erro ao salvar saldo para o produto ${productId}. Detalhes: ${responseBody}`);
           }
         } else {
           console.error(`Novo saldo para o produto ${productId} não é um número válido.`);
         }
       });
-
+  
       await Promise.all(saveRequests);
-
-      // Geração do PDF
+  
       generatePDF();
-
+  
       console.log('Inventário salvo com sucesso!');
       setInventoryStarted(false);
-
+  
       window.location.reload();
     } catch (error) {
       console.error('Erro ao salvar inventário: ', error);
@@ -154,44 +168,35 @@ const Inventory = () => {
     const pdf = new jsPDF();
     const fontSize = 10;
 
-    // Adicione o cabeçalho com a imagem e o texto
     const logoPath = 'https://i.ibb.co/Qfx8nnJ/logo.png';
     const logoWidth = 30;
     const logoHeight = 30;
 
-    // Carrega a imagem do logotipo (PNG)
     const logoImage = new Image();
     logoImage.src = logoPath;
 
     pdf.addImage(logoImage, 'PNG', 20, 10, logoWidth, logoHeight);
 
     pdf.setFontSize(14);
-
-    // Adicione o texto centralizado
     pdf.text('STOK - Inventário Inteligente', 120, 20, { align: 'center' });
 
-    // Adicione a data e hora abaixo do cabeçalho
     const currentDateTime = new Date().toLocaleString();
     pdf.setFontSize(fontSize);
     pdf.text(`Data e Hora: ${currentDateTime}`, 89, 25);
 
     const columns = ['Produto ID', 'Descrição Produto', 'Descrição Fazenda', 'Saldo Atual', 'Novo Saldo'];
-    const data = [];
-
-    for (let i = 0; i < products.length; i++) {
-      data.push([
-        products[i].produtoId,
-        products[i].descricaoProduto,
-        products[i].descricaoEstoque,
-        products[i].saldo,
-        newSaldos[products[i].produtoId] || ''
-      ]);
-    }
+    const pdfData = products.map((product) => [
+      product.produtoId,
+      product.descricaoProduto,
+      product.descricaoEstoque,
+      product.saldo,
+      newSaldos[product.produtoId] || ''
+    ]);
 
     pdf.autoTable({
       startY: 50,
       head: [columns],
-      body: data,
+      body: pdfData,
       theme: 'striped',
       styles: {
         fontSize: fontSize,
@@ -206,9 +211,9 @@ const Inventory = () => {
   return (
     <div>
       <Grid container spacing={2}>
-        <Grid item xs={3}>
+        <Grid item xs={2}>
           <FormControl fullWidth>
-            <InputLabel id="estoque-label">Estoque</InputLabel>
+            <InputLabel id="estoque-label">Fazenda</InputLabel>
             <Select labelId="estoque-label" id="estoque" value={estoqueId} onChange={(e) => setEstoqueId(e.target.value)}>
               {estoques.map((estoque) => (
                 <MenuItem key={estoque.id} value={estoque.id}>
@@ -217,6 +222,37 @@ const Inventory = () => {
               ))}
             </Select>
           </FormControl>
+        </Grid>
+        <Grid item xs={2}>
+          <FormControl fullWidth>
+            <InputLabel id="local-label">Estoque / Local</InputLabel>
+            <Select labelId="local-label" id="local" value={selectedLocal} onChange={(e) => setSelectedLocal(e.target.value)}>
+              {localData.map((local) => (
+                <MenuItem key={local.id} value={local.id}>
+                  {local.descricao}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+        </Grid>
+        <Grid item xs={2}>
+          <FormControl fullWidth>
+            <InputLabel id="grupo-label">Grupo</InputLabel>
+            <Select labelId="grupo-label" id="grupo" value={selectedGrupo} onChange={(e) => setSelectedGrupo(e.target.value)}>
+              {grupoData.map((grupo) => (
+                <MenuItem key={grupo.id} value={grupo.id}>
+                  {grupo.descricao}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+        </Grid>
+        <Grid item xs={2}>
+          <Box mb={2}>
+            <Button variant="contained" color="primary" onClick={handleSearchClick} fullWidth>
+              Buscar
+            </Button>
+          </Box>
         </Grid>
         <Grid item xs={2}>
           <Box mb={2}>
@@ -232,7 +268,7 @@ const Inventory = () => {
             ) : null}
           </Box>
         </Grid>
-        <Grid item xs={3}>
+        <Grid item xs={2}>
           <Box mb={3} sx={{ display: 'flex', gap: '8px' }}>
             {inventoryStarted ? (
               <Button
