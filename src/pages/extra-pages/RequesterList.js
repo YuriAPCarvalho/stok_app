@@ -11,7 +11,7 @@ const RequesterList = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch('http://localhost:3001/api/solicitante');
+        const response = await fetch('http://191.252.212.69:3001/api/solicitante');
         const data = await response.json();
         setSolicitante(data);
       } catch (error) {
@@ -24,8 +24,8 @@ const RequesterList = () => {
 
   const deleteItem = async (id) => {
     try {
-      await fetch(`http://localhost:3001/api/solicitante/${id}`, { method: 'DELETE' });
-      const response = await fetch('http://localhost:3001/api/solicitante');
+      await fetch(`http://191.252.212.69:3001/api/solicitante/${id}`, { method: 'DELETE' });
+      const response = await fetch('http://191.252.212.69:3001/api/solicitante');
       const data = await response.json();
       setSolicitante(data);
     } catch (error) {

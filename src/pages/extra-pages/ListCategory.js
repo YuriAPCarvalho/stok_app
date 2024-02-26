@@ -11,7 +11,7 @@ const ListCategory = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch('http://localhost:3001/api/categoria');
+        const response = await fetch('http://191.252.212.69:3001/api/categoria');
         const data = await response.json();
         setCategoria(data);
       } catch (error) {
@@ -24,8 +24,8 @@ const ListCategory = () => {
 
   const deleteItem = async (id) => {
     try {
-      await fetch(`http://localhost:3001/api/categoria/${id}`, { method: 'DELETE' });
-      const response = await fetch('http://localhost:3001/api/categoria');
+      await fetch(`http://191.252.212.69:3001/api/categoria/${id}`, { method: 'DELETE' });
+      const response = await fetch('http://191.252.212.69:3001/api/categoria');
       const data = await response.json();
       setCategoria(data);
     } catch (error) {

@@ -24,7 +24,7 @@ const OutputItems = () => {
 
   const handleSave = async () => {
     const method = itemId ? 'PUT' : 'POST';
-    const url = itemId ? `http://localhost:3001/api/saida-item/${itemId}` : 'http://localhost:3001/api/saida-item';
+    const url = itemId ? `http://191.252.212.69:3001/api/saida-item/${itemId}` : 'http://191.252.212.69:3001/api/saida-item';
 
     const response = await fetch(url, {
       method,
@@ -46,11 +46,11 @@ const OutputItems = () => {
 
     if (produtoId) {
       try {
-        let response = await fetch(`http://localhost:3001/api/saida-item/produtoId/${produtoId}`);
+        let response = await fetch(`http://191.252.212.69:3001/api/saida-item/produtoId/${produtoId}`);
         let data = await response.json();
 
         if (!data) {
-          response = await fetch(`http://localhost:3001/api/saida-item/descricao/${produtoId}`);
+          response = await fetch(`http://191.252.212.69:3001/api/saida-item/descricao/${produtoId}`);
           data = await response.json();
         }
       } catch (error) {
@@ -82,7 +82,7 @@ const OutputItems = () => {
     if (itemId) {
       const fetchData = async () => {
         try {
-          const response = await fetch(`http://localhost:3001/api/saida-item/${itemId}`);
+          const response = await fetch(`http://191.252.212.69:3001/api/saida-item/${itemId}`);
           const data = await response.json();
           setId(data.id);
           setProdutoId(data.produtoId);
@@ -105,7 +105,7 @@ const OutputItems = () => {
 
   useEffect(() => {
     const fetchProduto = async () => {
-      const response = await fetch('http://localhost:3001/api/produto');
+      const response = await fetch('http://191.252.212.69:3001/api/produto');
       const data = await response.json();
       setProdutosId(data);
     };
@@ -115,7 +115,7 @@ const OutputItems = () => {
 
   useEffect(() => {
     const fetchEstoque = async () => {
-      const response = await fetch('http://localhost:3001/api/estoque');
+      const response = await fetch('http://191.252.212.69:3001/api/estoque');
       const data = await response.json();
       setEstoques(data);
     };
@@ -125,7 +125,7 @@ const OutputItems = () => {
 
   useEffect(() => {
     const fetchsubEstoque = async () => {
-      const response = await fetch('http://localhost:3001/api/sub-estoque');
+      const response = await fetch('http://191.252.212.69:3001/api/sub-estoque');
       const data = await response.json();
       setsubEstoques(data);
     };
@@ -136,7 +136,7 @@ const OutputItems = () => {
 
   useEffect(() => {
     const fetchSolicitante = async () => {
-      const response = await fetch('http://localhost:3001/api/solicitante');
+      const response = await fetch('http://191.252.212.69:3001/api/solicitante');
       const data = await response.json();
       setSolicitantes(data);
     };
@@ -146,7 +146,7 @@ const OutputItems = () => {
 
   useEffect(() => {
     const fetchUsuario = async () => {
-      const response = await fetch('http://localhost:3001/api/usuario');
+      const response = await fetch('http://191.252.212.69:3001/api/usuario');
       const data = await response.json();
       setUsuarios(data);
     };

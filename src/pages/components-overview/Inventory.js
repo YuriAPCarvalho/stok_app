@@ -46,15 +46,15 @@ const Inventory = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const responseEstoque = await fetch('http://localhost:3001/api/estoque');
+        const responseEstoque = await fetch('http://191.252.212.69:3001/api/estoque');
         const dataEstoque = await responseEstoque.json();
         setEstoques(dataEstoque);
 
-        const responseLocal = await fetch('http://localhost:3001/api/sub-estoque');
+        const responseLocal = await fetch('http://191.252.212.69:3001/api/sub-estoque');
         const dataLocal = await responseLocal.json();
         setLocalData(dataLocal);
 
-        const responseGrupo = await fetch('http://localhost:3001/api/categoria');
+        const responseGrupo = await fetch('http://191.252.212.69:3001/api/categoria');
         const dataGrupo = await responseGrupo.json();
         setGrupoData(dataGrupo);
       } catch (error) {
@@ -74,7 +74,7 @@ const Inventory = () => {
           grupo: selectedGrupo
         });
 
-        const responseSaldo = await fetch(`http://localhost:3001/api/saldo/busca?${queryParams}`);
+        const responseSaldo = await fetch(`http://191.252.212.69:3001/api/saldo/busca?${queryParams}`);
         const dataSaldo = await responseSaldo.json();
 
      
@@ -113,7 +113,7 @@ const Inventory = () => {
         console.log('Produto ID:', productId, 'Novo Saldo:', newSaldo);
   
         if (!isNaN(newSaldo) || newSaldo === '') {
-          const url = `http://localhost:3001/api/saldo/${productId}/${estoqueId}/${selectedLocal}`;
+          const url = `http://191.252.212.69:3001/api/saldo/${productId}/${estoqueId}/${selectedLocal}`;
           console.log('URL:', url);
           const response = await fetch(url, {
             method: 'PUT',

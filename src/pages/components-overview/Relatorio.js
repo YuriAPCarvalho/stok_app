@@ -33,7 +33,7 @@ const Inventory = () => {
 
   const fetchFazendas = async () => {
     try {
-      const response = await fetch('http://localhost:3001/api/estoque');
+      const response = await fetch('http://191.252.212.69:3001/api/estoque');
       const fazendasData = await response.json();
       setFazendas(fazendasData);
     } catch (error) {
@@ -43,7 +43,7 @@ const Inventory = () => {
 
   const fetchLocais = async () => {
     try {
-      const response = await fetch('http://localhost:3001/api/sub-estoque');
+      const response = await fetch('http://191.252.212.69:3001/api/sub-estoque');
       const locaisData = await response.json();
       setLocais(locaisData);
     } catch (error) {
@@ -73,7 +73,7 @@ const Inventory = () => {
         });
       }
 
-      const response = await fetch(`http://localhost:3001/api/produto/relatorio?${queryParams}`);
+      const response = await fetch(`http://191.252.212.69:3001/api/produto/relatorio?${queryParams}`);
       const data = await response.json();
 
       const relatorioData = Array.isArray(data) ? data : [];
