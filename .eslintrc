@@ -28,6 +28,7 @@
   },
   "parser": "@babel/eslint-parser",
   "parserOptions": {
+  
     "ecmaFeatures": {
       "experimentalObjectRestSpread": true,
       "impliedStrict": true,

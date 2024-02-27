@@ -1,26 +1,26 @@
 // assets
-import { LoginOutlined, ProfileOutlined } from '@ant-design/icons';
+import { LoginOutlined, ProfileOutlined, FileJpgOutlined } from '@ant-design/icons';
 
 // icons
 const icons = {
   LoginOutlined,
-  ProfileOutlined
+  ProfileOutlined,
+  FileJpgOutlined
 };
 
 // ==============================|| MENU ITEMS - EXTRA PAGES ||============================== //
 
 const pages = {
   id: 'authentication',
-  title: 'Autenticação',
+  title: 'Relatórios',
   type: 'group',
   children: [
     {
-      id: 'login1',
-      title: 'Login',
+      id: 'relatorio',
+      title: 'Saldo de Estoque',
       type: 'item',
-      url: '/login',
-      icon: icons.LoginOutlined,
-      target: true
+      url: '/relatorio',
+      icon: icons.FileJpgOutlined
     }
   ]
 };

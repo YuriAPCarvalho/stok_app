@@ -13,7 +13,7 @@ import {
   FormControl,
   InputLabel,
   Select,
-  MenuItem
+  MenuItem,
 } from '@mui/material';
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';
@@ -24,12 +24,32 @@ const Inventory = () => {
   const [fazenda, setFazenda] = useState('');
   const [local, setLocal] = useState('');
   const [relatorio, setRelatorio] = useState([]);
+  const [orderBy, setOrderBy] = useState('');
+  const [order, setOrder] = useState('asc');
 
   useEffect(() => {
     fetchFazendas();
     fetchLocais();
     fetchRelatorio();
   }, []);
+
+  const getSortedRelatorio = () => {
+    if (orderBy) {
+      const orderMultiplier = order === 'asc' ? 1 : -1;
+      return [...relatorio].sort((a, b) => {
+        if (a[orderBy] < b[orderBy]) {
+          return -1 * orderMultiplier;
+        }
+        if (a[orderBy] > b[orderBy]) {
+          return 1 * orderMultiplier;
+        }
+        return 0;
+      });
+    }
+    return relatorio;
+  };
+
+  const sortedRelatorio = getSortedRelatorio();
 
   const fetchFazendas = async () => {
     try {
@@ -81,6 +101,12 @@ const Inventory = () => {
     } catch (error) {
       console.error('Erro ao buscar relatório: ', error);
     }
+  };
+
+  const handleSort = (field) => {
+    const newOrder = orderBy === field && order === 'asc' ? 'desc' : 'asc';
+    setOrderBy(field);
+    setOrder(newOrder);
   };
 
   const generatePDF = () => {
@@ -188,15 +214,50 @@ const Inventory = () => {
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell>ID Material</TableCell>
-              <TableCell>Material</TableCell>
-              <TableCell>Fazenda</TableCell>
-              <TableCell>Local</TableCell>
-              <TableCell>Quantidade</TableCell>
+              <TableCell>
+                <Button onClick={() => handleSort('id_material')}>
+                  ID Material
+                  {orderBy === 'id_material' && (
+                    <span>{order === 'asc' ? '↑' : '↓'}</span>
+                  )}
+                </Button>
+              </TableCell>
+              <TableCell>
+                <Button onClick={() => handleSort('material')}>
+                  Material
+                  {orderBy === 'material' && (
+                    <span>{order === 'asc' ? '↑' : '↓'}</span>
+                  )}
+                </Button>
+              </TableCell>
+              <TableCell>
+                <Button onClick={() => handleSort('fazenda')}>
+                  Fazenda
+                  {orderBy === 'fazenda' && (
+                    <span>{order === 'asc' ? '↑' : '↓'}</span>
+                  )}
+                </Button>
+              </TableCell>
+              <TableCell>
+                <Button onClick={() => handleSort('local')}>
+                  Local
+                  {orderBy === 'local' && (
+                    <span>{order === 'asc' ? '↑' : '↓'}</span>
+                  )}
+                </Button>
+              </TableCell>
+              <TableCell>
+                <Button onClick={() => handleSort('quantidade')}>
+                  Quantidade
+                  {orderBy === 'quantidade' && (
+                    <span>{order === 'asc' ? '↑' : '↓'}</span>
+                  )}
+                </Button>
+              </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {relatorio.map((item) => (
+            {sortedRelatorio.map((item) => (
               <TableRow key={item.id_material}>
                 <TableCell>{item.id_material}</TableCell>
                 <TableCell>{item.material}</TableCell>

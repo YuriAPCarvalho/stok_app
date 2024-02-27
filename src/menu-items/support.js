@@ -37,13 +37,6 @@ const support = {
       type: 'item',
       url: '/inventario',
       icon: icons.FormOutlined
-    },
-    {
-      id: 'relatorio',
-      title: 'Relatório',
-      type: 'item',
-      url: '/relatorio',
-      icon: icons.FileJpgOutlined
     }
   ]
 };
