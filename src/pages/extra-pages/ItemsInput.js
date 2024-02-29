@@ -90,7 +90,7 @@ const ItemsInput = () => {
 
   useEffect(() => {
     const fetchProduto = async () => {
-      const response = await fetch('http://191.252.212.69:3001/api/produto');
+      const response = await fetch('http://191.252.212.69:3001/api/produto/descricao');
       const data = await response.json();
       setProdutosId(data);
     };
