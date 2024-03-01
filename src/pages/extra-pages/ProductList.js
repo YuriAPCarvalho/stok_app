@@ -22,6 +22,7 @@ const ProductList = () => {
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [totalPages, setTotalPages] = useState(0);
   const [loading, setLoading] = useState(true);
+  const [refresh, setRefresh] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -34,10 +35,7 @@ const ProductList = () => {
         }
         const data = await response.json();
 
-        // Verifique o formato real da resposta
         if (data && data.produtos && Array.isArray(data.produtos)) {
-          console.log('Dados recebidos:', data);
-
           const totalPagesFromData = parseInt(data.totalPages, 10);
           if (!isNaN(totalPagesFromData) && totalPagesFromData > 0) {
             setTotalPages(totalPagesFromData);
@@ -57,24 +55,23 @@ const ProductList = () => {
     };
 
     fetchData();
-  }, [page, rowsPerPage]);
+  }, [page, rowsPerPage, refresh]);
 
   const deleteItem = async (id) => {
     try {
       await fetch(`http://191.252.212.69:3001/api/produto/${id}`, { method: 'DELETE' });
-      const response = await fetch('http://191.252.212.69:3001/api/produto');
-      const data = await response.json();
-      setProduto(data.produtos);
+      handleRefresh();
     } catch (error) {
       console.error('Error deleting item: ', error);
     }
   };
 
-  const handleChangePage = (event, newPage) => {
-    console.log('Total de páginas:', totalPages);
-    console.log('Página atual:', page);
-    console.log('Nova página:', newPage);
+  const handleRefresh = () => {
+    // A função setRefresh atualiza o estado, disparando o useEffect
+    setRefresh((prevRefresh) => !prevRefresh);
+  };
 
+  const handleChangePage = (event, newPage) => {
     if (newPage >= 1 && newPage <= totalPages) {
       setPage(newPage);
     }
@@ -82,7 +79,7 @@ const ProductList = () => {
 
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(1); // Reset page to 1 when changing rowsPerPage
+    setPage(1);
   };
 
   return (

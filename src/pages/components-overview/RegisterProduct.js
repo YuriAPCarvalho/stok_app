@@ -17,6 +17,7 @@ const RegisterProduct = () => {
   const [estado, setEstado] = React.useState('');
   const [fotoProduto, setFotoProduto] = React.useState(null);
   const [imageURL, setImageURL] = useState(null);
+  const [deletePhoto, setDeletePhoto] = useState(false);
 
   const handleCategoriaChange = (event) => {
     setCategoriaId(event.target.value);
@@ -30,6 +31,13 @@ const RegisterProduct = () => {
     const file = event.target.files[0];
     setFotoProduto(file);
     setImageURL(URL.createObjectURL(file));
+    setDeletePhoto(false);
+  };
+
+  const handleDeletePhoto = () => {
+    setFotoProduto(null);
+    setImageURL(null);
+    setDeletePhoto(true);
   };
 
   useEffect(() => {
@@ -83,7 +91,13 @@ const RegisterProduct = () => {
     const url = itemId ? `http://191.252.212.69:3001/api/produto/${itemId}` : 'http://191.252.212.69:3001/api/produto';
 
     const formData = new FormData();
-    formData.append('fotoProduto', fotoProduto);
+
+    if (fotoProduto) {
+      formData.append('fotoProduto', fotoProduto);
+    } else if (deletePhoto) {
+      formData.append('deletePhoto', 'true');
+    }
+    
     formData.append('patrimonio', patrimonio);
     formData.append('descricao', descricao);
     formData.append('categoriaId', categoriaId);
@@ -166,7 +180,15 @@ const RegisterProduct = () => {
               Foto produto
             </Button>
           </label>
-          {imageURL && <img src={imageURL} alt={descricao} />}
+          {imageURL && (
+            <div>
+              <img src={"imageURL"} alt={descricao} />
+              <Button variant="outlined" color="error" onClick={handleDeletePhoto}>
+                Excluir Foto
+              </Button>
+            </div>
+          )}
+          
         </Grid>
         <Grid item xs={12}>
           <Grid container spacing={1}>
