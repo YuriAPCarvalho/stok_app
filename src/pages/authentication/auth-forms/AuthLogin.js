@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Button, FormHelperText, Grid, IconButton, InputAdornment, InputLabel, OutlinedInput, Stack } from '@mui/material';
+import { Button, FormHelperText, Grid, IconButton, InputAdornment, InputLabel, OutlinedInput, Stack, Typography } from '@mui/material';
 import * as Yup from 'yup';
 import { Formik } from 'formik';
 import AnimateButton from 'components/@extended/AnimateButton';
@@ -142,8 +142,13 @@ const AuthLogin = () => {
                   </Button>
                 </AnimateButton>
               </Grid>
-              <Grid item xs={12}></Grid>
+              <Grid item xs={12}>
+              <Typography variant="body2" color="textSecondary" align="end">
+                  v.1.0.2904
+                </Typography>
+                </Grid>
             </Grid>
+            
           </form>
         )}
       </Formik>
