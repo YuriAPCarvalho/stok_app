@@ -83,6 +83,8 @@ const Inventory = () => {
           saldo: saldo.saldo,
           descricaoProduto: saldo.descricao,
           descricaoEstoque: saldo.descricaoEstoque,
+          descricaoLocal: saldo.descricaoLocal,
+          descricaoCategoria: saldo.descricaoCategoria,
           fotoProduto: saldo.fotoProduto, 
           mimeType: 'image/jpeg' 
         }));
@@ -184,14 +186,19 @@ const Inventory = () => {
     pdf.setFontSize(fontSize);
     pdf.text(`Data e Hora: ${currentDateTime}`, 89, 25);
 
-    const columns = ['Produto ID', 'Descrição Produto', 'Descrição Fazenda', 'Saldo Atual', 'Novo Saldo'];
-    const pdfData = products.map((product) => [
-      product.produtoId,
-      product.descricaoProduto,
-      product.descricaoEstoque,
-      product.saldo,
-      newSaldos[product.produtoId] || ''
-    ]);
+    const columns = ['Produto ID', 'Descrição Produto', 'Descrição Fazenda', 'Saldo Atual', 'Novo Saldo', 'Diferença'];
+
+    const pdfData = products.map((product) => {
+      const diferenca = (newSaldos[product.produtoId] || 0) - product.saldo;
+      return [
+        product.produtoId,
+        product.descricaoProduto,
+        product.descricaoEstoque,
+        product.saldo,
+        newSaldos[product.produtoId] || '',
+        diferenca
+      ];
+    });
 
     pdf.autoTable({
       startY: 50,
@@ -301,6 +308,8 @@ const Inventory = () => {
               <TableCell>Foto do Produto</TableCell>
               <TableCell>Descrição Produto</TableCell>
               <TableCell>Descrição Fazenda</TableCell>
+              <TableCell>Descrição Estoque/Local</TableCell>
+              <TableCell>Descrição Categoria</TableCell>
               <TableCell>Saldo</TableCell>
               <TableCell>Novo Saldo</TableCell>
             </TableRow>
@@ -318,6 +327,8 @@ const Inventory = () => {
                 </TableCell>
                 <TableCell>{product.descricaoProduto}</TableCell>
                 <TableCell>{product.descricaoEstoque}</TableCell>
+                <TableCell>{product.descricaoLocal}</TableCell>
+                <TableCell>{product.descricaoCategoria}</TableCell>
                 <TableCell>{product.saldo}</TableCell>
                 <TableCell>
                   {inventoryStarted ? (

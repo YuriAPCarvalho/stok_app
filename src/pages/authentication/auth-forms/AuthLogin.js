@@ -144,7 +144,7 @@ const AuthLogin = () => {
               </Grid>
               <Grid item xs={12}>
               <Typography variant="body2" color="textSecondary" align="end">
-                  v.1.0.2904
+                  v.1.0.2902
                 </Typography>
                 </Grid>
             </Grid>
