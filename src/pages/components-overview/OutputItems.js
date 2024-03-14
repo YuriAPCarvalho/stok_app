@@ -1,6 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import { TextField, Button, FormControl, Select, MenuItem, InputLabel, Grid, Paper, Typography } from '@mui/material';
-import { Link, useNavigate, useParams } from '../../../node_modules/react-router-dom/dist/index';
+import { Link, useNavigate, useParams } from 'react-router-dom';
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as yup from 'yup';
+import { useForm } from 'react-hook-form';
+
+const schema = yup.object().shape({
+  quantidade: yup.number().required('Campo obrigatório'),
+  dataEntrada: yup.date().required('Campo obrigatório'),
+  estoqueId: yup.array().required('Campo obrigatório'),
+
+});
+
 
 const OutputItems = () => {
   const navigate = useNavigate();
@@ -9,17 +20,24 @@ const OutputItems = () => {
   const [produtoId, setProdutoId] = useState([]);
   const [produtosId, setProdutosId] = useState([]);
   const [quantidade, setQuantidade] = useState('');
-  const [data, setData] = useState();
+  const [data, setData] = useState('');
   const [estoqueId, setEstoqueId] = useState([]);
   const [subestoqueId, setsubEstoqueId] = useState([]);
   const [estoques, setEstoques] = useState([]);
   const [subestoques, setsubEstoques] = useState([]);
-  const [usuarioId, setUsuarioId] = useState([]);
-  const [usuarios, setUsuarios] = useState([]);
   const [solicitanteId, setSolicitanteId] = useState([]);
   const [solicitantes, setSolicitantes] = useState([]);
   const [gerarRecibo, setGerarRecibo] = useState(false);
   const [tipoSaida, setTipoSaida] = useState('');
+  const [usuarioId, setUsuarioId] = useState(localStorage.getItem('user') || ''); // Definindo o valor inicial a partir do localStorage
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors }
+  } = useForm({
+    resolver: yupResolver(schema)
+  });
 
   const handleSave = async () => {
     const method = itemId ? 'PUT' : 'POST';
@@ -60,10 +78,6 @@ const OutputItems = () => {
 
   const handleSolicitanteChange = (event) => {
     setSolicitanteId(event.target.value);
-  };
-
-  const handleUsuarioChange = (event) => {
-    setUsuarioId(event.target.value);
   };
 
   const handleEstoqueChange = (event) => {
@@ -143,22 +157,12 @@ const OutputItems = () => {
     fetchSolicitante();
   }, []);
 
-  useEffect(() => {
-    const fetchUsuario = async () => {
-      const response = await fetch('http://191.252.212.69:3001/api/usuario');
-      const data = await response.json();
-      setUsuarios(data);
-    };
-
-    fetchUsuario();
-  }, []);
-
   return (
     <Paper elevation={3} style={{ padding: 20, margin: 'auto' }}>
       <Typography variant="h6" gutterBottom>
         Saída de Itens
       </Typography>
-      <Grid container spacing={2}>
+      <Grid container spacing={2} component="form" onSubmit={handleSubmit}>
         <Grid item xs={1}>
           <TextField label="ID" type="number" disabled fullWidth value={id} onChange={(e) => setId(e.target.value)} />
         </Grid>
@@ -211,16 +215,16 @@ const OutputItems = () => {
           </FormControl>
         </Grid>
         <Grid item xs={3}>
-          <FormControl sx={{ width: '100%' }}>
-            <InputLabel id="solicitants-label">Usuário</InputLabel>
-            <Select labelId="solicitants-label" value={usuarioId} onChange={handleUsuarioChange}>
-              {usuarios.map((usuario) => (
-                <MenuItem key={usuario.id} value={usuario.id}>
-                  {usuario.nome}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
+          <TextField
+            sx={{ width: '100%' }}
+            {...register('user')}
+            error={!!errors.user}
+            helperText={errors.user?.message}
+            label="Usuário responsável"
+            defaultValue="Usuário Logado"
+            disabled
+            value={localStorage.getItem('user')}
+          />
         </Grid>
         <Grid item xs={3}>
           <FormControl sx={{ width: '100%' }}>

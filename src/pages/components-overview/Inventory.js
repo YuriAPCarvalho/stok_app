@@ -77,7 +77,7 @@ const Inventory = () => {
         const responseSaldo = await fetch(`http://191.252.212.69:3001/api/saldo/busca?${queryParams}`);
         const dataSaldo = await responseSaldo.json();
 
-     
+
         const productsData = dataSaldo.map((saldo) => ({
           produtoId: saldo.id,
           saldo: saldo.saldo,
@@ -85,8 +85,8 @@ const Inventory = () => {
           descricaoEstoque: saldo.descricaoEstoque,
           descricaoLocal: saldo.descricaoLocal,
           descricaoCategoria: saldo.descricaoCategoria,
-          fotoProduto: saldo.fotoProduto, 
-          mimeType: 'image/jpeg' 
+          fotoProduto: saldo.fotoProduto,
+          mimeType: 'image/jpeg'
         }));
 
         setProducts(productsData);
@@ -113,7 +113,7 @@ const Inventory = () => {
     try {
       const saveRequests = Object.entries(newSaldos).map(async ([productId, newSaldo]) => {
         console.log('Produto ID:', productId, 'Novo Saldo:', newSaldo);
-  
+
         if (!isNaN(newSaldo) || newSaldo === '') {
           const url = `http://191.252.212.69:3001/api/saldo/${productId}/${estoqueId}/${selectedLocal}`;
           console.log('URL:', url);
@@ -126,23 +126,23 @@ const Inventory = () => {
               saldo: newSaldo
             })
           });
-  
+
           if (!response.ok) {
-            const responseBody = await response.text(); 
+            const responseBody = await response.text();
             console.error(`Erro ao salvar saldo para o produto ${productId}. Detalhes: ${responseBody}`);
           }
         } else {
           console.error(`Novo saldo para o produto ${productId} não é um número válido.`);
         }
       });
-  
+
       await Promise.all(saveRequests);
-  
+
       generatePDF();
-  
+
       console.log('Inventário salvo com sucesso!');
       setInventoryStarted(false);
-  
+
       window.location.reload();
     } catch (error) {
       console.error('Erro ao salvar inventário: ', error);
@@ -319,11 +319,15 @@ const Inventory = () => {
               <TableRow key={product.produtoId}>
                 <TableCell>{product.produtoId}</TableCell>
                 <TableCell>
-                  <img
-                    src={`data:${product.mimeType};base64,${bufferToBase64(product.fotoProduto.data)}`}
-                    alt={`Foto ${product.descricaoProduto}`}
-                    style={{ width: '40px', height: '40px' }}
-                  />
+                  {product.fotoProduto && product.fotoProduto.data ? (
+                    <img
+                      src={`data:${product.mimeType};base64,${bufferToBase64(product.fotoProduto.data)}`}
+                      alt={`Foto ${product.descricaoProduto}`}
+                      style={{ width: '40px', height: '40px' }}
+                    />
+                  ) : (
+                    <span>No Image Available</span>
+                  )}
                 </TableCell>
                 <TableCell>{product.descricaoProduto}</TableCell>
                 <TableCell>{product.descricaoEstoque}</TableCell>
@@ -331,7 +335,7 @@ const Inventory = () => {
                 <TableCell>{product.descricaoCategoria}</TableCell>
                 <TableCell>{product.saldo}</TableCell>
                 <TableCell>
-                  {inventoryStarted ? (
+                  {inventoryStarted && (
                     <TextField
                       fullWidth
                       id={`new-saldo-${product.produtoId}`}
@@ -340,11 +344,12 @@ const Inventory = () => {
                       value={newSaldos[product.produtoId] !== undefined ? newSaldos[product.produtoId] : ''}
                       onChange={handleNewSaldoChange(product.produtoId)}
                     />
-                  ) : null}
+                  )}
                 </TableCell>
               </TableRow>
             ))}
           </TableBody>
+
         </Table>
       </TableContainer>
     </div>
