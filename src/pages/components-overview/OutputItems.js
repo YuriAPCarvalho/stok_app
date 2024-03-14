@@ -19,7 +19,6 @@ const OutputItems = () => {
   const [solicitanteId, setSolicitanteId] = useState([]);
   const [solicitantes, setSolicitantes] = useState([]);
   const [gerarRecibo, setGerarRecibo] = useState(false);
-  const [destinationStock, setDestinationStock] = useState('');
   const [tipoSaida, setTipoSaida] = useState('');
 
   const handleSave = async () => {
@@ -163,7 +162,7 @@ const OutputItems = () => {
         <Grid item xs={1}>
           <TextField label="ID" type="number" disabled fullWidth value={id} onChange={(e) => setId(e.target.value)} />
         </Grid>
-        <Grid item xs={11}>
+        <Grid item xs={5}>
           <FormControl fullWidth>
             <InputLabel id="produtoId-label">Buscar por Produtos</InputLabel>
             <Select labelId="produtoId-label" value={produtoId} onChange={handleProdutoIdChange}>
@@ -189,7 +188,7 @@ const OutputItems = () => {
         </Grid>
         <Grid item xs={3}>
           <FormControl sx={{ width: '100%' }}>
-            <InputLabel id="origin-stock-label">Fazenda de Origem</InputLabel>
+            <InputLabel id="origin-stock-label">Fazenda Origem</InputLabel>
             <Select labelId="origin-stock-label" value={estoqueId} onChange={handleEstoqueChange}>
               {estoques.map((estoque) => (
                 <MenuItem key={estoque.id} value={estoque.id}>
@@ -201,7 +200,7 @@ const OutputItems = () => {
         </Grid>
         <Grid item xs={3}>
           <FormControl sx={{ width: '100%' }}>
-            <InputLabel id="origin-stock-label">Estoque/Local</InputLabel>
+            <InputLabel id="origin-stock-label">Estoque/Local Origem</InputLabel>
             <Select labelId="origin-stock-label" value={subestoqueId} onChange={handlesubEstoqueChange}>
               {subestoques.map((subestoque) => (
                 <MenuItem key={subestoque.id} value={subestoque.id}>
@@ -253,13 +252,30 @@ const OutputItems = () => {
             </Select>
           </FormControl>
         </Grid>
-        {tipoSaida === 'transfer' && (
+        {tipoSaida === 'Transferência' && (
           <Grid item xs={3}>
             <FormControl sx={{ width: '100%' }}>
-              <InputLabel id="destination-stock-label">Estoque de Destino</InputLabel>
-              <Select labelId="destination-stock-label" value={destinationStock} onChange={(e) => setDestinationStock(e.target.value)}>
-                <MenuItem value="Stock 1">Stock 1</MenuItem>
-                <MenuItem value="Stock 2">Stock 2</MenuItem>
+              <InputLabel id="destination-stock-label">Fazenda Destino</InputLabel>
+              <Select labelId="origin-stock-label" value={estoqueId} onChange={handleEstoqueChange}>
+                {estoques.map((estoque) => (
+                  <MenuItem key={estoque.id} value={estoque.id}>
+                    {estoque.descricao}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </Grid>
+        )}
+        {tipoSaida === 'Transferência' && (
+          <Grid item xs={3}>
+            <FormControl sx={{ width: '100%' }}>
+              <InputLabel id="destination-stock-label">Estoque Destino</InputLabel>
+              <Select labelId="destination-stock-label" value={subestoqueId} onChange={handlesubEstoqueChange}>
+                {subestoques.map((subestoque) => (
+                  <MenuItem key={subestoque.id} value={subestoque.id}>
+                    {subestoque.descricao}
+                  </MenuItem>
+                ))}
               </Select>
             </FormControl>
           </Grid>
