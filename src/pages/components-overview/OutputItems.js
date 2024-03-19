@@ -29,7 +29,7 @@ const OutputItems = () => {
   const [solicitantes, setSolicitantes] = useState([]);
   const [gerarRecibo, setGerarRecibo] = useState(false);
   const [tipoSaida, setTipoSaida] = useState('');
-  const [usuarioId, setUsuarioId] = useState(localStorage.getItem('user') || ''); // Definindo o valor inicial a partir do localStorage
+  const [usuarioId, setUsuarioId] = useState(localStorage.getItem('userId') || '');
 
   const {
     register,
